@@ -1,6 +1,6 @@
 "use strict";
 const find = function (selector) {
-    return Array.from(document.querySelectorAll(selector))[1];
+    return Array.from(document.querySelectorAll(selector))[0];
 };
 let count = 0;
 const moneyElement = find("#money");
