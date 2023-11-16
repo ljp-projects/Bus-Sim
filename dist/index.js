@@ -5,8 +5,7 @@ const find = function (selector) {
 let count = 0;
 const moneyElement = find("#money");
 const earnElement = find("#earn");
-earnElement.onclick = (e) => {
-    e.preventDefault();
+earnElement === null || earnElement === void 0 ? void 0 : earnElement.addEventListener('click', () => {
     count++;
     earnElement.textContent = `${count}`;
-};
+});

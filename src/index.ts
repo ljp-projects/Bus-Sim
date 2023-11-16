@@ -7,8 +7,7 @@ let count = 0;
 const moneyElement = find<HTMLElement>("#money")
 const earnElement = find<HTMLElement>("#earn")
 
-earnElement.onclick = (e: MouseEvent) => {
-    e.preventDefault()
+earnElement?.addEventListener('click', () => {
     count++
     earnElement.textContent = `${count}`
-}
+})
