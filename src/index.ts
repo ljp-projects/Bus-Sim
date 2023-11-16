@@ -9,6 +9,11 @@ interface MutableStat<T> {
     add: (value: T) => any
 }
 
+interface ImmutableStat<T> {
+    created: Readonly<number>
+    value: Readonly<T>
+}
+
 const Game = {
     Money: {
         lastChanged: new Date().getTime(),
@@ -25,11 +30,20 @@ const Game = {
             Game.Money.value += amount
             Game.Money.lastChanged = new Date().getTime()
         }
-    } as MutableStat<number>
+    } as MutableStat<number>,
+
+    Increment: {
+        created: new Date().getTime(),
+        value: 1.3
+    } as ImmutableStat<number>
 }
 
 const moneyElement = find<HTMLElement> ("#money")
 const earnElement =  find<HTMLElement> ("#earn")
+
+Game.Increment.value = 9
+
+console.log(Game.Increment.value)
 
 earnElement?.addEventListener('click', () => {
     Game.Money.add(1)

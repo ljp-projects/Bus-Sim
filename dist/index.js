@@ -16,10 +16,16 @@ const Game = {
             Game.Money.value += amount;
             Game.Money.lastChanged = new Date().getTime();
         }
+    },
+    Increment: {
+        created: new Date().getTime(),
+        value: 1.3
     }
 };
 const moneyElement = find("#money");
 const earnElement = find("#earn");
+Game.Increment.value = 9;
+console.log(Game.Increment.value);
 earnElement === null || earnElement === void 0 ? void 0 : earnElement.addEventListener('click', () => {
     Game.Money.add(1);
     moneyElement.textContent = `${Game.Money.value}`;
