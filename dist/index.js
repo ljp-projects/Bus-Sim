@@ -7,5 +7,6 @@ const moneyElement = find("#money");
 const earnElement = find("#earn");
 earnElement.onclick = (e) => {
     e.preventDefault();
-    earnElement.textContent = `${count++}`;
+    count++;
+    earnElement.textContent = `${count}`;
 };

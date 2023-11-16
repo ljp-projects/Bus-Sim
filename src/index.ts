@@ -9,5 +9,6 @@ const earnElement = find<HTMLElement>("#earn")
 
 earnElement.onclick = (e: MouseEvent) => {
     e.preventDefault()
-    earnElement.textContent = `${count++}`
+    count++
+    earnElement.textContent = `${count}`
 }
