@@ -1,0 +1,6 @@
+Bus Sim
+
+Gameplay
+    - Create a bus line
+    - Upgrade buses
+    - Earn money
