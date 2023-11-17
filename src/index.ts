@@ -66,7 +66,7 @@ const Game = {
 
     GenerateEvent: {
         created: new Date().getTime(),
-        value: (): number => [0, 1, 2][~~(Math.random() * 3)],
+        value: (): number => [0, 1, 2, 2, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 2, 1, 0, 2, 2, 0][~~(Math.random() * 20)],
     } as ImmutableStat<() => number>,
 };
 
