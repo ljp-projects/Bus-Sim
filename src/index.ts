@@ -90,8 +90,12 @@ addLineElement?.addEventListener("click", () => {
 
         const earn = setInterval(() => {
             if (Game.Money.add) Game.Money.add(passengers * 0.5 + Player.Lines.value.length)
-            passengers = ~~(Math.random() * 10)
-            find<HTMLElement> (`#BUS-LINE-${id}-PROFIT`).textContent = `${passengers * 0.5 + Player.Lines.value.length}`
+            (() => {
+                setTimeout(() => {
+                    passengers = ~~(Math.random() * 10)
+                    find<HTMLElement> (`#BUS-LINE-${id}-PROFIT`).textContent = `${passengers * 0.5 + Player.Lines.value.length}`
+                }, 5000)
+            })()
         }, 1000)
 
         Player.Lines.value.push(generatedLine)
