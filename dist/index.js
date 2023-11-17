@@ -9,8 +9,8 @@ const Player = {
      */
     Lines: {
         created: new Date().getTime(),
-        value: []
-    }
+        value: [],
+    },
 };
 const Game = {
     Money: {
@@ -30,11 +30,11 @@ const Game = {
             const amount = params[0] || 0;
             Game.Money.value -= amount;
             Game.Money.lastChanged = new Date().getTime();
-        }
+        },
     },
     Increment: {
         created: new Date().getTime(),
-        value: 1.3
+        value: 1.3,
     },
     Update: {
         created: new Date().getTime(),
@@ -42,14 +42,18 @@ const Game = {
             setInterval(() => {
                 moneyElement.textContent = `${Game.Money.value}`;
             }, frequencyMilli);
-        }
-    }
+        },
+    },
+    GenerateEvent: {
+        created: new Date().getTime(),
+        value: () => [0, 1, 2][~~(Math.random() * 3)],
+    },
 };
 const moneyElement = find("#money");
 const earnElement = find("#earn");
 const linesElement = find("#lines");
 const addLineElement = find("#line");
-earnElement === null || earnElement === void 0 ? void 0 : earnElement.addEventListener('click', () => {
+earnElement === null || earnElement === void 0 ? void 0 : earnElement.addEventListener("click", () => {
     if (Game.Money.add)
         Game.Money.add(1);
 });
@@ -66,11 +70,34 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
             <p>Per second: $<span id="BUS-LINE-${id}-PROFIT">${passengers * 0.5 + Player.Lines.value.length}</span></p>
         </li>
         `;
-        const earn = setInterval(() => {
-            if (Game.Money.add)
+        const earnLoop = () => {
+            const event = Game.GenerateEvent.value();
+            if (Game.Money.add && event === 0) {
                 Game.Money.add(passengers * 0.5 + Player.Lines.value.length);
-        }, 1000);
-        const baord = setInterval(() => {
+                setTimeout(earnLoop, 1e3);
+            }
+            else {
+                switch (event) {
+                    // Bus breaks down
+                    case 1:
+                        alert(`Your bus '${name}(${id})' broke down!`);
+                        setTimeout(earnLoop, 1e4);
+                        break;
+                    case 2:
+                        const fuelPrice = Math.min(`${name}`.length, Player.Lines.value.length * 2);
+                        if (fuelPrice <= Game.Money.value) {
+                            alert(`Your bus '${name}(${id})' is out of fuel! Paying to refuel...`);
+                            if (Game.Money.take)
+                                Game.Money.take(fuelPrice);
+                            setTimeout(earnLoop, 2e3 + 5e2);
+                        }
+                        ;
+                        break;
+                }
+            }
+        };
+        earnLoop();
+        const board = setInterval(() => {
             passengers = ~~(Math.random() * 10);
             find(`#BUS-LINE-${id}-PROFIT`).textContent = `${passengers * 0.5 + Player.Lines.value.length}`;
         }, 5000);
