@@ -2,6 +2,14 @@
 const find = function (selector) {
     return Array.from(document.querySelectorAll(selector))[0];
 };
+const generateNotification = function (title, msg) {
+    return `
+    <li>
+        <b>${title}</b>
+        <p>${msg}</p>
+    </li>
+    `;
+};
 const Player = {
     /**
      * The players bus lines.
@@ -72,25 +80,29 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
         </li>
         `;
         const earnLoop = () => {
-            const event = Game.GenerateEvent.value();
+            let event = Game.GenerateEvent.value();
             if (Game.Money.add && event === 0) {
                 Game.Money.add(passengers * 0.5 + Player.Lines.value.length);
                 setTimeout(earnLoop, 1e3);
             }
             else {
+                const notify = find("#notifications");
                 switch (event) {
                     // Bus breaks down
                     case 1:
-                        alert(`Your bus '${name}(${id})' broke down!`);
+                        notify.innerHTML += generateNotification(`Your bus '${name} (${id})' broke down!`, `Your bus '${name} (${id})' has broken down. Earning from '${name} (${id})' will continue in 10 seconds.`);
                         setTimeout(earnLoop, 1e4);
                         break;
                     case 2:
-                        const fuelPrice = Math.min(`${name}`.length, Player.Lines.value.length * 1e2);
+                        const fuelPrice = Math.min(`${id}`.length, Player.Lines.value.length * 1e2);
                         if (fuelPrice <= Game.Money.value) {
-                            alert(`Your bus '${name}(${id})' is out of fuel! Paying to refuel...`);
+                            notify.innerHTML += generateNotification(`Your bus '${name}(${id})' is out of fuel!`, `You will need to pay ${fuelPrice} to refuel it.`);
                             if (Game.Money.take)
                                 Game.Money.take(fuelPrice);
                             setTimeout(earnLoop, 2e3 + 5e2);
+                        }
+                        else {
+                            earnLoop();
                         }
                         ;
                         break;
