@@ -116,7 +116,9 @@ addLineElement?.addEventListener("click", () => {
                     case 1:
                         notify.innerHTML += generateNotification(`Your bus '${name} (${id})' broke down!`, `Your bus '${name} (${id})' has broken down. Earning from '${name} (${id})' will continue in 10 seconds.`);
                         setTimeout(earnLoop, 1e4);
-                        setTimeout(find<HTMLElement>(".n").remove, 5000)
+                        setTimeout(() => {
+                            notify.innerHTML = ""
+                        }, 5000)
                         break;
                     case 2:
                         const fuelPrice = Math.max(`${id}`.length, Player.Lines.value.length * 1e2)
@@ -125,7 +127,7 @@ addLineElement?.addEventListener("click", () => {
                             if (Game.Money.take) Game.Money.take(fuelPrice)
                             setTimeout(earnLoop, 2e3 + 5e2);
                             setTimeout(() => {
-                                document.querySelectorAll('.n').forEach((el: Element) => el.remove())
+                                notify.innerHTML = ""
                             }, 5000)
                         } else {
                             earnLoop()
