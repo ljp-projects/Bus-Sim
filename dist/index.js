@@ -4,7 +4,7 @@ const find = function (selector) {
 };
 const generateNotification = function (title, msg) {
     return `
-    <li>
+    <li class="n">
         <b>${title}</b>
         <p>${msg}</p>
     </li>
@@ -92,6 +92,7 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
                     case 1:
                         notify.innerHTML += generateNotification(`Your bus '${name} (${id})' broke down!`, `Your bus '${name} (${id})' has broken down. Earning from '${name} (${id})' will continue in 10 seconds.`);
                         setTimeout(earnLoop, 1e4);
+                        setTimeout(find(".n").remove, 5000);
                         break;
                     case 2:
                         const fuelPrice = Math.min(`${id}`.length, Player.Lines.value.length * 1e2);
@@ -100,6 +101,7 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
                             if (Game.Money.take)
                                 Game.Money.take(fuelPrice);
                             setTimeout(earnLoop, 2e3 + 5e2);
+                            setTimeout(find(".n").remove, 5000);
                         }
                         else {
                             earnLoop();
