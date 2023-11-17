@@ -95,13 +95,15 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
                         setTimeout(find(".n").remove, 5000);
                         break;
                     case 2:
-                        const fuelPrice = Math.min(`${id}`.length, Player.Lines.value.length * 1e2);
+                        const fuelPrice = Math.max(`${id}`.length, Player.Lines.value.length * 1e2);
                         if (fuelPrice <= Game.Money.value) {
                             notify.innerHTML += generateNotification(`Your bus '${name}(${id})' is out of fuel!`, `You will need to pay ${fuelPrice} to refuel it.`);
                             if (Game.Money.take)
                                 Game.Money.take(fuelPrice);
                             setTimeout(earnLoop, 2e3 + 5e2);
-                            setTimeout(find(".n").remove, 5000);
+                            setTimeout(() => {
+                                document.querySelectorAll('.n').forEach((el) => el.remove());
+                            }, 5000);
                         }
                         else {
                             earnLoop();

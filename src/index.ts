@@ -100,8 +100,7 @@ addLineElement?.addEventListener("click", () => {
         <li style="list-style: none;" id="BUS-LINE-${id}">
             <b id="BUS-LINE-${id}-NAME">${name}</b>
             <p id="BUS-LINE-${id}-ID">${id}</p>
-            <p>Per second: $<span id="BUS-LINE-${id}-PROFIT">${passengers * 0.5 + Player.Lines.value.length
-            }</span></p>
+            <p>Per second: $<span id="BUS-LINE-${id}-PROFIT">${passengers * 0.5 + Player.Lines.value.length}</span></p>
         </li>
         `;
 
@@ -120,12 +119,14 @@ addLineElement?.addEventListener("click", () => {
                         setTimeout(find<HTMLElement>(".n").remove, 5000)
                         break;
                     case 2:
-                        const fuelPrice = Math.min(`${id}`.length, Player.Lines.value.length * 1e2)
+                        const fuelPrice = Math.max(`${id}`.length, Player.Lines.value.length * 1e2)
                         if (fuelPrice <= Game.Money.value) {
                             notify.innerHTML += generateNotification(`Your bus '${name}(${id})' is out of fuel!`, `You will need to pay ${fuelPrice} to refuel it.`)
                             if (Game.Money.take) Game.Money.take(fuelPrice)
                             setTimeout(earnLoop, 2e3 + 5e2);
-                            setTimeout(find<Element>(".n").remove, 5000)
+                            setTimeout(() => {
+                                document.querySelectorAll('.n').forEach((el: Element) => el.remove())
+                            }, 5000)
                         } else {
                             earnLoop()
                         };
