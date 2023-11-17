@@ -46,7 +46,8 @@ const Game = {
     },
     GenerateEvent: {
         created: new Date().getTime(),
-        value: () => [0, 1, 2, 2, 0, 0, 0, 0, 2, 2, 1, 0, 0, 0, 2, 1, 0, 2, 2, 0][~~(Math.random() * 20)],
+        // 4% chance of getting bad thing
+        value: () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0][~~(Math.random() * 50)],
     },
 };
 const moneyElement = find("#money");
