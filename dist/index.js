@@ -85,7 +85,7 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
                         setTimeout(earnLoop, 1e4);
                         break;
                     case 2:
-                        const fuelPrice = Math.min(`${name}`.length, Player.Lines.value.length * 2);
+                        const fuelPrice = Math.min(`${name}`.length, Player.Lines.value.length * 1e2);
                         if (fuelPrice <= Game.Money.value) {
                             alert(`Your bus '${name}(${id})' is out of fuel! Paying to refuel...`);
                             if (Game.Money.take)
