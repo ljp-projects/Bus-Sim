@@ -59,6 +59,23 @@ const Game = {
         },
     } as MutableStat<number>,
 
+    LinePrice: {
+        lastChanged: new Date().getTime(),
+        value: 100,
+
+        set: (...params: number[]) => {
+            const amount: number = params[0] || 0;
+            Game.LinePrice.value = amount;
+            Game.LinePrice.lastChanged = new Date().getTime();
+        },
+
+        add: (...params: number[]) => {
+            const amount: number = params[0] || 0;
+            Game.LinePrice.value += amount;
+            Game.LinePrice.lastChanged = new Date().getTime();
+        }
+    } as MutableStat<number>,
+
     Increment: {
         created: new Date().getTime(),
         value: 1.3,
@@ -78,6 +95,13 @@ const Game = {
         // 4% chance of getting bad thing
         value: (): number => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0][~~(Math.random() * 50)],
     } as ImmutableStat<() => number>,
+
+    IncreasePrice: {
+        created: new Date().getTime(),
+        value: (...args: number[]): number => {
+            return args[0] * Game.Increment.value
+        } 
+    } as ImmutableStat<(...args: number[]) => number>
 };
 
 const moneyElement = find<HTMLElement>("#money");
@@ -90,7 +114,8 @@ earnElement?.addEventListener("click", () => {
 });
 
 addLineElement?.addEventListener("click", () => {
-    if (Game.Money.value >= 100) {
+    if (Game.Money.value >= Game.LinePrice.value) {
+        if (Game.LinePrice.set) Game.LinePrice.set(Game.IncreasePrice.value(Game.LinePrice.value))
         const name: string =
             prompt("What shall the name of the line be?") || "BUS LINE NAME";
         const id: number = new Date().getTime() || 0;

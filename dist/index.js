@@ -40,6 +40,20 @@ const Game = {
             Game.Money.lastChanged = new Date().getTime();
         },
     },
+    LinePrice: {
+        lastChanged: new Date().getTime(),
+        value: 100,
+        set: (...params) => {
+            const amount = params[0] || 0;
+            Game.LinePrice.value = amount;
+            Game.LinePrice.lastChanged = new Date().getTime();
+        },
+        add: (...params) => {
+            const amount = params[0] || 0;
+            Game.LinePrice.value += amount;
+            Game.LinePrice.lastChanged = new Date().getTime();
+        }
+    },
     Increment: {
         created: new Date().getTime(),
         value: 1.3,
@@ -57,6 +71,12 @@ const Game = {
         // 4% chance of getting bad thing
         value: () => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0][~~(Math.random() * 50)],
     },
+    IncreasePrice: {
+        created: new Date().getTime(),
+        value: (...args) => {
+            return args[0] * Game.Increment.value;
+        }
+    }
 };
 const moneyElement = find("#money");
 const earnElement = find("#earn");
@@ -67,7 +87,9 @@ earnElement === null || earnElement === void 0 ? void 0 : earnElement.addEventLi
         Game.Money.add(1);
 });
 addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.addEventListener("click", () => {
-    if (Game.Money.value >= 100) {
+    if (Game.Money.value >= Game.LinePrice.value) {
+        if (Game.LinePrice.set)
+            Game.LinePrice.set(Game.IncreasePrice.value(Game.LinePrice.value));
         const name = prompt("What shall the name of the line be?") || "BUS LINE NAME";
         const id = new Date().getTime() || 0;
         let passengers = ~~(Math.random() * (Player.Lines.value.length * 5));
