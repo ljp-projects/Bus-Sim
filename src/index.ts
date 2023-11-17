@@ -125,7 +125,7 @@ addLineElement?.addEventListener("click", () => {
                             notify.innerHTML += generateNotification(`Your bus '${name}(${id})' is out of fuel!`, `You will need to pay ${fuelPrice} to refuel it.`)
                             if (Game.Money.take) Game.Money.take(fuelPrice)
                             setTimeout(earnLoop, 2e3 + 5e2);
-                            setTimeout(find<HTMLElement>(".n").remove, 5000)
+                            setTimeout(find<Element>(".n").remove, 5000)
                         } else {
                             earnLoop()
                         };
