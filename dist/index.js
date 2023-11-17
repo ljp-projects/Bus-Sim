@@ -57,7 +57,7 @@ addLineElement === null || addLineElement === void 0 ? void 0 : addLineElement.a
     if (Game.Money.value >= 100) {
         const name = prompt("What shall the name of the line be?") || "BUS LINE NAME";
         const id = new Date().getTime() || 0;
-        let passengers = ~~(Math.random() * 10);
+        let passengers = ~~(Math.random() * (Player.Lines.value.length * 5));
         const generatedLine = [name, [id, passengers]];
         const generatedHTMLLine = `
         <li style="list-style: none;" id="BUS-LINE-${id}">
