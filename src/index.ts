@@ -23,7 +23,7 @@ const Routes: GameProps = Object.freeze({
             "Finhorn Valley": 1100,
             "Musk": 1110,
             "Eloneville": 3000,
-            "Musk Square": 1111, 
+            "Musk Square": 1111,
             "Anthony Corner": 1120,
             "El Salvador": 3100,
             length: 9
@@ -113,7 +113,7 @@ class Bus {
 
     public travel(): Bus {
         if (!this.route || !this.hasRoute) return this
-        
+
         const loop = (stop: Stop) => {
             if (!this.route || !this.hasRoute) return
 
@@ -125,7 +125,7 @@ class Bus {
             if (this.status <= 8) console.log(stop, next != null ? next : null, prev != null ? prev : null)
             else if (this.status === 9) console.log("Bus has broken down.")
             else if (this.status === 10) console.log("Bus is out of fuel.")
-            
+
             if (i % 2 === 0 || !(this.status <= 8)) this.status = ~~(Math.random() * 11)
 
             if (next) {
@@ -149,26 +149,33 @@ class Bus {
         const el = document.createElement('li')
         el.innerHTML = html
 
-        const button = document.getElementById(`BUS-${this.id}-CHECK`)
-        button?.addEventListener('click', () => {
-            const dialog: HTMLDialogElement = document.getElementById("about-bus") as HTMLDialogElement
-            const html = `
-            <h2>${this.name}</h2>
-            <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
-            <button id="BUS-${this.id}-CLOSE">Close</button>
-            `
+        setTimeout(() => {
+            const button = document.getElementById(`BUS-${this.id}-CHECK`)
+            button?.addEventListener('click', () => {
+                console.log("clicked!")
+                const dialog: HTMLDialogElement = document.getElementById("about-bus") as HTMLDialogElement
 
-            if (dialog) {
-                dialog.innerHTML = html
-                dialog.showModal()
-                const close = document.getElementById(`BUS-${this.id}-CLOSE`)
+                const html = `
+                <h2>${this.name}</h2>
+                <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+                <button id="BUS-${this.id}-CLOSE">Close</button>
+                `
 
-                close?.addEventListener('click', () => {
-                    dialog.close()
-                    dialog.innerHTML = ""
-                })
-            }
-        })
+                if (dialog) {
+                    dialog.innerHTML = html
+                    dialog.showModal()
+
+                    setTimeout(() => {
+                        const close = document.getElementById(`BUS-${this.id}-CLOSE`)
+
+                        close?.addEventListener('click', () => {
+                            dialog.close()
+                            dialog.innerHTML = ""
+                        })
+                    }, 100)
+                }
+            })
+        }, 100)
 
         list?.appendChild(el)
 

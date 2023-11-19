@@ -113,24 +113,29 @@ class Bus {
         `;
         const el = document.createElement('li');
         el.innerHTML = html;
-        const button = document.getElementById(`BUS-${this.id}-CHECK`);
-        button === null || button === void 0 ? void 0 : button.addEventListener('click', () => {
-            const dialog = document.getElementById("about-bus");
-            const html = `
-            <h2>${this.name}</h2>
-            <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
-            <button id="BUS-${this.id}-CLOSE">Close</button>
-            `;
-            if (dialog) {
-                dialog.innerHTML = html;
-                dialog.showModal();
-                const close = document.getElementById(`BUS-${this.id}-CLOSE`);
-                close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
-                    dialog.close();
-                    dialog.innerHTML = "";
-                });
-            }
-        });
+        setTimeout(() => {
+            const button = document.getElementById(`BUS-${this.id}-CHECK`);
+            button === null || button === void 0 ? void 0 : button.addEventListener('click', () => {
+                console.log("clicked!");
+                const dialog = document.getElementById("about-bus");
+                const html = `
+                <h2>${this.name}</h2>
+                <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+                <button id="BUS-${this.id}-CLOSE">Close</button>
+                `;
+                if (dialog) {
+                    dialog.innerHTML = html;
+                    dialog.showModal();
+                    setTimeout(() => {
+                        const close = document.getElementById(`BUS-${this.id}-CLOSE`);
+                        close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
+                            dialog.close();
+                            dialog.innerHTML = "";
+                        });
+                    }, 100);
+                }
+            });
+        }, 100);
         list === null || list === void 0 ? void 0 : list.appendChild(el);
         return this;
     }
