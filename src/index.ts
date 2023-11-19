@@ -145,7 +145,7 @@ class Bus {
         <br>
         <button id="BUS-${this.id}-CHECK" class="check">Check</button>
         `
-        
+
         const el = document.createElement('li')
         el.innerHTML = html
 
@@ -167,9 +167,9 @@ class Bus {
         const dialog = document.getElementById(`about-bus`) as HTMLDialogElement
         const content = document.getElementById(`content`)
 
-        if (dialog) close?.addEventListener('click', () => {
-            content?.setAttribute("class", "noblur")
-            dialog?.close()
+        if (dialog && content) close?.addEventListener('click', () => {
+            content.setAttribute("class", "noblur")
+            dialog.close()
             dialog.innerHTML = ""
         })
     }

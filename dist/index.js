@@ -127,10 +127,10 @@ class Bus {
         const close = document.getElementById(`BUS-${this.id}-CLOSE`);
         const dialog = document.getElementById(`about-bus`);
         const content = document.getElementById(`content`);
-        if (dialog)
+        if (dialog && content)
             close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
-                content === null || content === void 0 ? void 0 : content.setAttribute("class", "noblur");
-                dialog === null || dialog === void 0 ? void 0 : dialog.close();
+                content.setAttribute("class", "noblur");
+                dialog.close();
                 dialog.innerHTML = "";
             });
     }
