@@ -1,181 +1,157 @@
-const find = function <Type>(selector: string): Type {
-    return Array.from(document.querySelectorAll(selector))[0] as Type;
-};
-
-const generateNotification = function(title: string, msg: string) {
-    return `
-    <li class="n">
-        <b>${title}</b>
-        <p>${msg}</p>
-    </li>
-    `
+interface GameProps {
+    readonly [x: string]: any
+    readonly length: number
 }
 
-interface MutableStat<T> {
-    lastChanged: number;
-    value: T;
-    set?: (value: T) => any;
-    add?: (value: T) => any;
-    take?: (value: T) => any;
+interface Stop {
+    name: {}
+    code: number
+    timeSecs: number
 }
 
-interface ImmutableStat<T> {
-    readonly created: number;
-    readonly value: T;
+interface Route {
+    stops: Stop[]
+    totalTimeSecs: number
 }
 
-const Player = {
-    /**
-     * The players bus lines.
-     * [NAME, ID]
-     */
-    Lines: {
-        created: new Date().getTime(),
-        value: [],
-    } as ImmutableStat<[string, [number, number]][]>,
-};
-
-const Game = {
-    Money: {
-        lastChanged: new Date().getTime(),
-        value: 0,
-
-        set: (...params: number[]) => {
-            const amount: number = params[0] || 0;
-            Game.Money.value = amount;
-            Game.Money.lastChanged = new Date().getTime();
-        },
-
-        add: (...params: number[]) => {
-            const amount: number = params[0] || 0;
-            Game.Money.value += amount;
-            Game.Money.lastChanged = new Date().getTime();
-        },
-
-        take: (...params: number[]) => {
-            const amount: number = params[0] || 0;
-            Game.Money.value -= amount;
-            Game.Money.lastChanged = new Date().getTime();
-        },
-    } as MutableStat<number>,
-
-    LinePrice: {
-        lastChanged: new Date().getTime(),
-        value: 100,
-
-        set: (...params: number[]) => {
-            const amount: number = params[0] || 0;
-            Game.LinePrice.value = amount;
-            Game.LinePrice.lastChanged = new Date().getTime();
-        },
-
-        add: (...params: number[]) => {
-            const amount: number = params[0] || 0;
-            Game.LinePrice.value += amount;
-            Game.LinePrice.lastChanged = new Date().getTime();
+const Routes: GameProps = Object.freeze({
+    MakeRoute: (numOfStops: number): Route => {
+        const places: GameProps = {
+            "Albanese Beach": 1000,
+            "Scomoville": 2000,
+            "Edison Square": 2100,
+            "Finhorn Valley": 1100,
+            "Musk": 1110,
+            "Eloneville": 3000,
+            "Musk Square": 1111, 
+            "Anthony Corner": 1120,
+            "El Salvador": 3100,
+            length: 9
         }
-    } as MutableStat<number>,
 
-    Increment: {
-        created: new Date().getTime(),
-        value: 1.3,
-    } as ImmutableStat<number>,
+        const stops: Stop[] = []
 
-    Update: {
-        created: new Date().getTime(),
-        value: (frequencyMilli: number) => {
-            setInterval(() => {
-                moneyElement.textContent = `${Game.Money.value}`;
-            }, frequencyMilli);
-        },
-    } as ImmutableStat<(frequencyMilli: number) => void>,
+        for (let i = 0; i < numOfStops; i++) {
 
-    GenerateEvent: {
-        created: new Date().getTime(),
-        // 4% chance of getting bad thing
-        value: (): number => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0][~~(Math.random() * 50)],
-    } as ImmutableStat<() => number>,
+            const duration: number = Math.max(~~(Math.random() * ~~(((1000 + 2000 + 2100 + 1100 + 1110 + 3000 + 1111 + 1120 + 3100) / 9) / 100)), ~~(((1000 + 2000 + 2100 + 1100 + 1110 + 3000 + 1111 + 1120 + 3100) / 9) / 100) - 13)
+            const name = Object.keys(places)[~~(Math.random() * places.length)]
 
-    IncreasePrice: {
-        created: new Date().getTime(),
-        value: (...args: number[]): number => {
-            return args[0] * Game.Increment.value
-        } 
-    } as ImmutableStat<(...args: number[]) => number>
-};
+            stops.push({
+                name: name,
+                code: places[name],
+                timeSecs: duration
+            })
+        }
 
-const moneyElement = find<HTMLElement>("#money");
-const earnElement = find<HTMLElement>("#earn");
-const linesElement = find<HTMLElement>("#lines");
-const addLineElement = find<HTMLElement>("#line");
+        return {
+            stops: stops,
+            totalTimeSecs: ((): number => {
+                let time = 0
+                stops.forEach((stop: Stop) => {
+                    time += stop.timeSecs
+                })
+                return time
+            })()
+        }
+    },
 
-earnElement?.addEventListener("click", () => {
-    if (Game.Money.add) Game.Money.add(1);
-});
-
-addLineElement?.addEventListener("click", () => {
-    if (Game.Money.value >= Game.LinePrice.value) {
-        if (Game.LinePrice.set) Game.LinePrice.set(Game.IncreasePrice.value(Game.LinePrice.value))
-        const name: string =
-            prompt("What shall the name of the line be?") || "BUS LINE NAME";
-        const id: number = new Date().getTime() || 0;
-        let passengers = ~~(Math.random() * (Player.Lines.value.length * 5));
-        const generatedLine: [string, [number, number]] = [name, [id, passengers]];
-        const generatedHTMLLine = `
-        <li style="list-style: none;" id="BUS-LINE-${id}">
-            <b id="BUS-LINE-${id}-NAME">${name}</b>
-            <p id="BUS-LINE-${id}-ID">${id}</p>
-            <p>Per second: $<span id="BUS-LINE-${id}-PROFIT">${passengers * 0.5 + Player.Lines.value.length}</span></p>
-        </li>
-        `;
-
-        const earnLoop = () => {
-            let event = Game.GenerateEvent.value();
-            if (Game.Money.add && event === 0) {
-                Game.Money.add(passengers * 0.5 + Player.Lines.value.length);
-                setTimeout(earnLoop, 1e3)
-            } else {
-                const notify = find<HTMLElement>("#notifications")
-                switch (event) {
-                    // Bus breaks down
-                    case 1:
-                        notify.innerHTML += generateNotification(`Your bus '${name} (${id})' broke down!`, `Your bus '${name} (${id})' has broken down. Earning from '${name} (${id})' will continue in 10 seconds.`);
-                        setTimeout(earnLoop, 1e4);
-                        setTimeout(() => {
-                            notify.innerHTML = ""
-                        }, 5000)
-                        break;
-                    case 2:
-                        const fuelPrice = Math.max(`${id}`.length, Player.Lines.value.length * 1e2)
-                        if (fuelPrice <= Game.Money.value) {
-                            notify.innerHTML += generateNotification(`Your bus '${name}(${id})' is out of fuel!`, `You will need to pay ${fuelPrice} to refuel it.`)
-                            if (Game.Money.take) Game.Money.take(fuelPrice)
-                            setTimeout(earnLoop, 2e3 + 5e2);
-                            setTimeout(() => {
-                                notify.innerHTML = ""
-                            }, 5000)
-                        } else {
-                            earnLoop()
-                        };
-                        break;
+    TravelRoute: (route: Route) => {
+        function loop(stop: Stop) {
+            const stopNext = route.stops[route.stops.indexOf(stop) !== route.stops.length - 1 ? route.stops.indexOf(stop) + 1 : -1]
+            const stopPrev = route.stops[route.stops.indexOf(stop) !== 0 ? route.stops.indexOf(stop) - 1 : -1]
+            console.log((() => {
+                if (stopPrev == null) {
+                    return `Travelling to ${stop.name} (${stop.code}), which would take ${stop.timeSecs} irl seconds, or ${stop.timeSecs * 5} game minutes.`
+                } else {
+                    return `Travelling to ${stop.name} (${stop.code}) from ${stopPrev.name} (${stopPrev.code}), which would take ${stop.timeSecs} irl seconds, or ${stop.timeSecs * 5} game minutes.`
                 }
-            }
-        };
+            })())
+            setTimeout(() => {
+                stopNext != null ? loop(stopNext) : console.log(`Finished travelling! Travel took ${route.totalTimeSecs} irl seconds, or ${route.totalTimeSecs * 5} game minutes.`)
+            }, stop.timeSecs * 1000)
+        }
 
-        earnLoop()
+        loop(route.stops[0])
+    },
 
-        const board = setInterval(() => {
-            passengers = ~~(Math.random() * 10);
-            find<HTMLElement>(`#BUS-LINE-${id}-PROFIT`).textContent = `${passengers * 0.5 + Player.Lines.value.length
-                }`;
-        }, 5000);
+    length: 2
+})
 
-        Player.Lines.value.push(generatedLine);
-        linesElement.innerHTML += generatedHTMLLine;
-        if (Game.Money.take) Game.Money.take(100);
-    } else {
-        alert(`You need more money.`);
+// Place codes help:
+// E.G. 
+//                  3                                       |           1                                                                                        |                        2                                                                 |                               5
+//                  ^                                       |           ^                                                                                        |                        ^                                                                 |                               ^
+//  The main place (which would represent a city or alike)  |  The secondary place, which is inside of the main place (which would represent a suburb or alike)  |  The tertiary place, inside of the secondary place (whould represent a valley or alike)  |  The fourth and final place, inside of the tertiary place (represents a mall or alike).
+
+class Bus {
+
+    name: string
+    id: number
+    hasRoute: boolean = false
+    route?: Route
+    status: number = 0
+
+    constructor(name: string, id: number, route?: Route) {
+        this.name = name
+        this.id = id
+        if (route) {
+            this.addRoute(route)
+        }
     }
-});
 
-Game.Update.value(50);
+    public addRoute(route: Route): Bus {
+        this.hasRoute = true
+        this.route = route
+        return this
+    }
+
+    public removeRoute(): Bus {
+        this.hasRoute = false
+        this.route = undefined
+        return this
+    }
+
+    public travel(): Bus {
+        if (!this.route || !this.hasRoute) return this
+        
+        const loop = (stop: Stop) => {
+            if (!this.route || !this.hasRoute) return
+
+            const i: number = this.route.stops.indexOf(stop)
+            console.log(i)
+            const next: Stop | undefined = this.route.stops[i !== this.route.stops.length - 1 ? i + 1 : -1]
+            const prev: Stop | undefined = this.route.stops[i !== 0 ? i - 1 : -1]
+
+            if (this.status <= 8) console.log(stop, next != null ? next : null, prev != null ? prev : null)
+            else if (this.status === 9) console.log("Bus has broken down.")
+            else if (this.status === 10) console.log("Bus is out of fuel.")
+            
+            if (i % 2 === 0 || !(this.status <= 8)) this.status = ~~(Math.random() * 11)
+
+            if (next) {
+                setTimeout(() => loop(next), stop.timeSecs * 1000)
+            }
+        }
+
+        loop(this.route.stops[0])
+
+        return this
+    }
+
+    public addToList(list: HTMLElement | null): Bus {
+        const html = `
+        <b>${this.name}</b> <p>(${this.id})</p>
+        `
+
+        const el = document.createElement('li')
+        el.innerHTML = html
+
+        list?.appendChild(el)
+
+        return this
+    }
+}
+
+const bus = new Bus('Pizza', new Date().getTime(), Routes.MakeRoute(5))
+
+bus.addToList(document.getElementById("buses"))
