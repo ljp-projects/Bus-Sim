@@ -149,5 +149,36 @@ class Bus {
         }
     }
 }
-const bus = new Bus('Pizza', new Date().getTime(), Routes.MakeRoute(5));
-bus.addToList(document.getElementById("buses"));
+let money = 0;
+let busPrice = 100;
+const addNewBus = () => {
+    var _a;
+    if (money >= busPrice) {
+        const name = (_a = document.getElementById("new-bus-name")) === null || _a === void 0 ? void 0 : _a.value;
+        const newBus = new Bus(name, new Date().getTime());
+        newBus.addToList(document.getElementById("buses"));
+        return true;
+    }
+    return false;
+};
+const addButton = document.getElementById("add");
+const earn = document.getElementById("earn");
+earn === null || earn === void 0 ? void 0 : earn.addEventListener("click", () => {
+    const moneyElement = document.getElementById("money");
+    money++;
+    if (moneyElement)
+        moneyElement.textContent = money.toString();
+});
+addButton === null || addButton === void 0 ? void 0 : addButton.addEventListener('click', () => {
+    const content = document.getElementById("content");
+    const dialog = document.getElementById("add-bus");
+    const add = document.getElementById("add-new-bus");
+    content === null || content === void 0 ? void 0 : content.setAttribute("class", "blur");
+    dialog.showModal();
+    add === null || add === void 0 ? void 0 : add.addEventListener('click', () => {
+        if (addNewBus()) {
+            content === null || content === void 0 ? void 0 : content.setAttribute("class", "noblur");
+            dialog.close();
+        }
+    });
+});

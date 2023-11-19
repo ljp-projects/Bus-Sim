@@ -193,6 +193,44 @@ class Bus {
     }
 }
 
-const bus = new Bus('Pizza', new Date().getTime(), Routes.MakeRoute(5))
+let money = 0
+let busPrice = 100
 
-bus.addToList(document.getElementById("buses"))
+const addNewBus = (): boolean => {
+    if (money >= busPrice) {
+        const name = (document.getElementById("new-bus-name") as HTMLInputElement)?.value
+        const newBus = new Bus(name, new Date().getTime())
+
+        newBus.addToList(document.getElementById("buses"))
+
+        return true
+    }
+
+    return false
+}
+
+const addButton = document.getElementById("add")
+const earn = document.getElementById("earn")
+
+earn?.addEventListener("click", () => {
+    const moneyElement = document.getElementById("money")
+    
+    money++
+    if (moneyElement) moneyElement.textContent = money.toString()
+})
+
+addButton?.addEventListener('click', () => {
+    const content: HTMLElement | null = document.getElementById("content")
+    const dialog = (document.getElementById("add-bus") as HTMLDialogElement)
+    const add = document.getElementById("add-new-bus")
+
+    content?.setAttribute("class", "blur")
+    dialog.showModal()
+
+    add?.addEventListener('click', () => {
+        if (addNewBus()) {
+            content?.setAttribute("class", "noblur")
+            dialog.close()
+        }
+    })
+})
