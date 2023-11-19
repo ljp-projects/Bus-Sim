@@ -167,7 +167,7 @@ class Bus {
         const dialog = document.getElementById(`about-bus`) as HTMLDialogElement
         const content = document.getElementById(`content`)
 
-        if (dialog && content) close?.addEventListener('click', () => {
+        if (dialog && content && close) close.addEventListener('click', () => {
             content.setAttribute("class", "noblur")
             dialog.close()
             dialog.innerHTML = ""
