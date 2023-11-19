@@ -156,7 +156,12 @@ const addNewBus = () => {
     if (money >= busPrice) {
         const name = (_a = document.getElementById("new-bus-name")) === null || _a === void 0 ? void 0 : _a.value;
         const newBus = new Bus(name, new Date().getTime());
+        const moneyElement = document.getElementById("money");
         newBus.addToList(document.getElementById("buses"));
+        money -= busPrice;
+        if (moneyElement)
+            moneyElement.textContent = money.toString();
+        busPrice *= 1.3;
         return true;
     }
     return false;

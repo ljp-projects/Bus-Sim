@@ -200,8 +200,13 @@ const addNewBus = (): boolean => {
     if (money >= busPrice) {
         const name = (document.getElementById("new-bus-name") as HTMLInputElement)?.value
         const newBus = new Bus(name, new Date().getTime())
+        const moneyElement = document.getElementById("money")
 
         newBus.addToList(document.getElementById("buses"))
+
+        money -= busPrice
+        if (moneyElement) moneyElement.textContent = money.toString()
+        busPrice *= 1.3
 
         return true
     }
@@ -214,7 +219,7 @@ const earn = document.getElementById("earn")
 
 earn?.addEventListener("click", () => {
     const moneyElement = document.getElementById("money")
-    
+
     money++
     if (moneyElement) moneyElement.textContent = money.toString()
 })
