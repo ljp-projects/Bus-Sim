@@ -117,7 +117,6 @@ class Bus {
             const button = document.getElementById(`BUS-${this.id}-CHECK`);
             button === null || button === void 0 ? void 0 : button.addEventListener('click', () => {
                 this.openDialog();
-                setTimeout(this.addCloseDialogListener, 100);
             });
         }, 100);
         list === null || list === void 0 ? void 0 : list.appendChild(el);
@@ -146,6 +145,7 @@ class Bus {
             dialog.innerHTML = html;
             content === null || content === void 0 ? void 0 : content.setAttribute("class", "blur");
             dialog.showModal();
+            setTimeout(this.addCloseDialogListener, 100);
         }
     }
 }

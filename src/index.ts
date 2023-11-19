@@ -153,7 +153,6 @@ class Bus {
             const button = document.getElementById(`BUS-${this.id}-CHECK`)
             button?.addEventListener('click', () => {
                 this.openDialog()
-                setTimeout(this.addCloseDialogListener, 100)
             })
         }, 100)
 
@@ -189,6 +188,7 @@ class Bus {
             dialog.innerHTML = html
             content?.setAttribute("class", "blur")
             dialog.showModal()
+            setTimeout(this.addCloseDialogListener, 100)
         }
     }
 }
