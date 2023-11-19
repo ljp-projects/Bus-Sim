@@ -201,12 +201,15 @@ const addNewBus = (): boolean => {
         const name = (document.getElementById("new-bus-name") as HTMLInputElement)?.value
         const newBus = new Bus(name, new Date().getTime())
         const moneyElement = document.getElementById("money")
+        const priceElement = document.getElementById("add-new-bus-cost")
 
         newBus.addToList(document.getElementById("buses"))
 
         money -= busPrice
         if (moneyElement) moneyElement.textContent = money.toString()
+
         busPrice *= 1.3
+        if (priceElement) priceElement.textContent = money.toString()
 
         return true
     }
@@ -228,6 +231,7 @@ addButton?.addEventListener('click', () => {
     const content: HTMLElement | null = document.getElementById("content")
     const dialog = (document.getElementById("add-bus") as HTMLDialogElement)
     const add = document.getElementById("add-new-bus")
+    const close = document.getElementById("add-bus-close")
 
     content?.setAttribute("class", "blur")
     dialog.showModal()
@@ -237,5 +241,10 @@ addButton?.addEventListener('click', () => {
             content?.setAttribute("class", "noblur")
             dialog.close()
         }
+    })
+
+    close?.addEventListener('click', () => {
+        content?.setAttribute("class", "noblur")
+        dialog.close()
     })
 })

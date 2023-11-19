@@ -157,11 +157,14 @@ const addNewBus = () => {
         const name = (_a = document.getElementById("new-bus-name")) === null || _a === void 0 ? void 0 : _a.value;
         const newBus = new Bus(name, new Date().getTime());
         const moneyElement = document.getElementById("money");
+        const priceElement = document.getElementById("add-new-bus-cost");
         newBus.addToList(document.getElementById("buses"));
         money -= busPrice;
         if (moneyElement)
             moneyElement.textContent = money.toString();
         busPrice *= 1.3;
+        if (priceElement)
+            priceElement.textContent = money.toString();
         return true;
     }
     return false;
@@ -178,6 +181,7 @@ addButton === null || addButton === void 0 ? void 0 : addButton.addEventListener
     const content = document.getElementById("content");
     const dialog = document.getElementById("add-bus");
     const add = document.getElementById("add-new-bus");
+    const close = document.getElementById("add-bus-close");
     content === null || content === void 0 ? void 0 : content.setAttribute("class", "blur");
     dialog.showModal();
     add === null || add === void 0 ? void 0 : add.addEventListener('click', () => {
@@ -185,5 +189,9 @@ addButton === null || addButton === void 0 ? void 0 : addButton.addEventListener
             content === null || content === void 0 ? void 0 : content.setAttribute("class", "noblur");
             dialog.close();
         }
+    });
+    close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
+        content === null || content === void 0 ? void 0 : content.setAttribute("class", "noblur");
+        dialog.close();
     });
 });
