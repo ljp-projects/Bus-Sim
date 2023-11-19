@@ -188,7 +188,7 @@ class Bus {
             dialog.innerHTML = html
             content?.setAttribute("class", "blur")
             dialog.showModal()
-            setTimeout(this.addCloseDialogListener, 100)
+            setTimeout(this.addCloseDialogListener.bind(this), 100)
         }
     }
 }

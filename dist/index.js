@@ -145,7 +145,7 @@ class Bus {
             dialog.innerHTML = html;
             content === null || content === void 0 ? void 0 : content.setAttribute("class", "blur");
             dialog.showModal();
-            setTimeout(this.addCloseDialogListener, 100);
+            setTimeout(this.addCloseDialogListener.bind(this), 100);
         }
     }
 }
