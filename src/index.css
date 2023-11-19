@@ -1,0 +1,34 @@
+#about-bus {
+    border-style: solid;
+    border-width: thin;
+    border-radius: 1rem;
+    border-color: #101010;
+    width: 10rem;
+    height: 10rem;
+    text-align: center;
+    background-color: #efefef;
+}
+
+.blur {
+    filter: blur(1rem);
+    background-color: #efefef;
+    transition-duration: 1s;
+}
+
+.noblur {
+    transition-duration: 1s;
+}
+
+button {
+    border: none;
+    border-radius: 0.25rem;
+    color: #efefef;
+}
+
+.close {
+    background-color: #A62C2C;
+}
+
+.check {
+    background-color: #4DA655;
+}

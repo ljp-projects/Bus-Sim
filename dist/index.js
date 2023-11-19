@@ -109,35 +109,44 @@ class Bus {
         <b>${this.name}</b>
         <p>(${this.id})</p>
         <br>
-        <button id="BUS-${this.id}-CHECK">Check</button>
+        <button id="BUS-${this.id}-CHECK" class="check">Check</button>
         `;
         const el = document.createElement('li');
         el.innerHTML = html;
         setTimeout(() => {
             const button = document.getElementById(`BUS-${this.id}-CHECK`);
             button === null || button === void 0 ? void 0 : button.addEventListener('click', () => {
-                console.log("clicked!");
-                const dialog = document.getElementById("about-bus");
-                const html = `
-                <h2>${this.name}</h2>
-                <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
-                <button id="BUS-${this.id}-CLOSE">Close</button>
-                `;
-                if (dialog) {
-                    dialog.innerHTML = html;
-                    dialog.showModal();
-                    setTimeout(() => {
-                        const close = document.getElementById(`BUS-${this.id}-CLOSE`);
-                        close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
-                            dialog.close();
-                            dialog.innerHTML = "";
-                        });
-                    }, 100);
-                }
+                this.openDialog();
+                setTimeout(this.addCloseDialogListener, 100);
             });
         }, 100);
         list === null || list === void 0 ? void 0 : list.appendChild(el);
         return this;
+    }
+    addCloseDialogListener() {
+        const close = document.getElementById(`BUS-${this.id}-CLOSE`);
+        const dialog = document.getElementById(`about-bus`);
+        const content = document.getElementById(`content`);
+        if (dialog)
+            close === null || close === void 0 ? void 0 : close.addEventListener('click', () => {
+                content === null || content === void 0 ? void 0 : content.setAttribute("class", "noblur");
+                dialog === null || dialog === void 0 ? void 0 : dialog.close();
+                dialog.innerHTML = "";
+            });
+    }
+    openDialog() {
+        const content = document.getElementById("content");
+        const dialog = document.getElementById("about-bus");
+        const html = `
+        <h2>${this.name}</h2>
+        <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+        <button id="BUS-${this.id}-CLOSE" class="close">Close</button>
+        `;
+        if (dialog) {
+            dialog.innerHTML = html;
+            content === null || content === void 0 ? void 0 : content.setAttribute("class", "blur");
+            dialog.showModal();
+        }
     }
 }
 const bus = new Bus('Pizza', new Date().getTime(), Routes.MakeRoute(5));

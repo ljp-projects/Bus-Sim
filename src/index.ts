@@ -143,43 +143,53 @@ class Bus {
         <b>${this.name}</b>
         <p>(${this.id})</p>
         <br>
-        <button id="BUS-${this.id}-CHECK">Check</button>
+        <button id="BUS-${this.id}-CHECK" class="check">Check</button>
         `
-
+        
         const el = document.createElement('li')
         el.innerHTML = html
 
         setTimeout(() => {
             const button = document.getElementById(`BUS-${this.id}-CHECK`)
             button?.addEventListener('click', () => {
-                console.log("clicked!")
-                const dialog: HTMLDialogElement = document.getElementById("about-bus") as HTMLDialogElement
-
-                const html = `
-                <h2>${this.name}</h2>
-                <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
-                <button id="BUS-${this.id}-CLOSE">Close</button>
-                `
-
-                if (dialog) {
-                    dialog.innerHTML = html
-                    dialog.showModal()
-
-                    setTimeout(() => {
-                        const close = document.getElementById(`BUS-${this.id}-CLOSE`)
-
-                        close?.addEventListener('click', () => {
-                            dialog.close()
-                            dialog.innerHTML = ""
-                        })
-                    }, 100)
-                }
+                this.openDialog()
+                setTimeout(this.addCloseDialogListener, 100)
             })
         }, 100)
 
         list?.appendChild(el)
 
         return this
+    }
+
+    private addCloseDialogListener() {
+        const close = document.getElementById(`BUS-${this.id}-CLOSE`)
+        const dialog = document.getElementById(`about-bus`) as HTMLDialogElement
+        const content = document.getElementById(`content`)
+
+        if (dialog) close?.addEventListener('click', () => {
+            content?.setAttribute("class", "noblur")
+            dialog?.close()
+            dialog.innerHTML = ""
+        })
+    }
+
+    private openDialog() {
+        const content: HTMLElement | null = document.getElementById("content")
+
+        const dialog: HTMLDialogElement = document.getElementById("about-bus") as HTMLDialogElement
+
+        const html = `
+        <h2>${this.name}</h2>
+        <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+        <button id="BUS-${this.id}-CLOSE" class="close">Close</button>
+        `
+
+        if (dialog) {
+            dialog.innerHTML = html
+            content?.setAttribute("class", "blur")
+            dialog.showModal()
+        }
     }
 }
 
