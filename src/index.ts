@@ -140,11 +140,35 @@ class Bus {
 
     public addToList(list: HTMLElement | null): Bus {
         const html = `
-        <b>${this.name}</b> <p>(${this.id})</p>
+        <b>${this.name}</b>
+        <p>(${this.id})</p>
+        <br>
+        <button id="BUS-${this.id}-CHECK">Check</button>
         `
 
         const el = document.createElement('li')
         el.innerHTML = html
+
+        const button = document.getElementById(`BUS-${this.id}-CHECK`)
+        button?.addEventListener('click', () => {
+            const dialog: HTMLDialogElement = document.getElementById("about-bus") as HTMLDialogElement
+            const html = `
+            <h2>${this.name}</h2>
+            <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+            <button id="BUS-${this.id}-CLOSE">Close</button>
+            `
+
+            if (dialog) {
+                dialog.innerHTML = html
+                dialog.showModal()
+                const close = document.getElementById(`BUS-${this.id}-CLOSE`)
+
+                close?.addEventListener('click', () => {
+                    dialog.close()
+                    dialog.innerHTML = ""
+                })
+            }
+        })
 
         list?.appendChild(el)
 
