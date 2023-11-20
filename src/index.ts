@@ -105,6 +105,18 @@ class Bus {
         return this
     }
 
+    public forEach(callbackfn: (k: string, v: number, i: number, a: Stop[]) => void, step?: number, take?: number): void {
+        if (this.route) {
+            this.route.stops.forEach((stop: Stop, index: number, array: Stop[]) => {
+                const keys = Object.keys(stop)
+
+                for (let i = 0; i < keys.length - (take || 0); i += step || 1) {
+                    callbackfn(keys[i], Object.values(stop)[i], index, array)
+                }
+            })
+        }
+    }
+
     public removeRoute(): Bus {
         this.hasRoute = false
         this.route = undefined
@@ -248,3 +260,6 @@ addButton?.addEventListener('click', () => {
         dialog.close()
     })
 })
+
+const test = new Bus("Test", new Date().getTime(), Routes.MakeRoute(5))
+test.forEach((k: string, v: number) => console.log(k, v), 1, 2)

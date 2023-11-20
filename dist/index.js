@@ -74,6 +74,16 @@ class Bus {
         this.route = route;
         return this;
     }
+    forEach(callbackfn, step, take) {
+        if (this.route) {
+            this.route.stops.forEach((stop, index, array) => {
+                const keys = Object.keys(stop);
+                for (let i = 0; i < keys.length - (take || 0); i += step || 1) {
+                    callbackfn(keys[i], Object.values(stop)[i], index, array);
+                }
+            });
+        }
+    }
     removeRoute() {
         this.hasRoute = false;
         this.route = undefined;
@@ -195,3 +205,5 @@ addButton === null || addButton === void 0 ? void 0 : addButton.addEventListener
         dialog.close();
     });
 });
+const test = new Bus("Test", new Date().getTime(), Routes.MakeRoute(5));
+test.forEach((k, v) => console.log(k, v), 1, 2);
