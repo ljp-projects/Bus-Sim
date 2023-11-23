@@ -183,6 +183,18 @@ const addNewBus = () => {
                 if (s != null) {
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
                 }
+            },
+            (status, stop, next, prev) => {
+                const s = document.querySelector(`BUS-${newBus.id}-STOP`);
+                if (s != null) {
+                    s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
+                }
+            },
+            (status, stop, next, prev) => {
+                const s = document.querySelector(`BUS-${newBus.id}-STOP`);
+                if (s != null) {
+                    s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
+                }
             }
         ]);
         money -= busPrice;
