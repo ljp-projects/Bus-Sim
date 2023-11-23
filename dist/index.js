@@ -89,7 +89,7 @@ class Bus {
         this.route = undefined;
         return this;
     }
-    travel() {
+    travel(eventCallbacks) {
         if (!this.route || !this.hasRoute)
             return this;
         const loop = (stop) => {
@@ -100,11 +100,11 @@ class Bus {
             const next = this.route.stops[i !== this.route.stops.length - 1 ? i + 1 : -1];
             const prev = this.route.stops[i !== 0 ? i - 1 : -1];
             if (this.status <= 8)
-                console.log(stop, next != null ? next : null, prev != null ? prev : null);
+                eventCallbacks[0](this.status, stop, next != null ? next : null, prev != null ? prev : null);
             else if (this.status === 9)
-                console.log("Bus has broken down.");
+                eventCallbacks[1](this.status, stop, next != null ? next : null, prev != null ? prev : null);
             else if (this.status === 10)
-                console.log("Bus is out of fuel.");
+                eventCallbacks[2](this.status, stop, next != null ? next : null, prev != null ? prev : null);
             if (i % 2 === 0 || !(this.status <= 8))
                 this.status = ~~(Math.random() * 11);
             if (next) {
@@ -149,6 +149,7 @@ class Bus {
         const html = `
         <h2>${this.name}</h2>
         <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+        <p id="BUS-${this.id}-STOP" class="stop">UNKNOWN STOP</p>
         <button id="BUS-${this.id}-CLOSE" class="close">Close</button>
         `;
         if (dialog) {
@@ -158,9 +159,16 @@ class Bus {
             setTimeout(this.addCloseDialogListener.bind(this), 100);
         }
     }
+    tick(callbackfn, s) {
+        setInterval(callbackfn, s * 1000);
+    }
 }
 let money = 0;
 let busPrice = 100;
+const chooseEvent = () => {
+    const numOfEvents = 3;
+    return ~~(Math.random() * numOfEvents);
+};
 const addNewBus = () => {
     var _a;
     if (money >= busPrice) {
@@ -169,6 +177,14 @@ const addNewBus = () => {
         const moneyElement = document.getElementById("money");
         const priceElement = document.getElementById("add-new-bus-cost");
         newBus.addToList(document.getElementById("buses"));
+        newBus.travel([
+            (status, stop, next, prev) => {
+                const s = document.querySelector(`BUS-${newBus.id}-STOP`);
+                if (s != null) {
+                    s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
+                }
+            }
+        ]);
         money -= busPrice;
         if (moneyElement)
             moneyElement.textContent = money.toString();
@@ -205,5 +221,3 @@ addButton === null || addButton === void 0 ? void 0 : addButton.addEventListener
         dialog.close();
     });
 });
-const test = new Bus("Test", new Date().getTime(), Routes.MakeRoute(5));
-test.forEach((k, v) => console.log(k, v), 1, 2);

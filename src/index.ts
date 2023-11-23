@@ -123,7 +123,7 @@ class Bus {
         return this
     }
 
-    public travel(): Bus {
+    public travel(eventCallbacks: ((status: number, stop: Stop, next: Stop | null, prev: Stop | null) => void)[]): Bus {
         if (!this.route || !this.hasRoute) return this
 
         const loop = (stop: Stop) => {
@@ -134,9 +134,9 @@ class Bus {
             const next: Stop | undefined = this.route.stops[i !== this.route.stops.length - 1 ? i + 1 : -1]
             const prev: Stop | undefined = this.route.stops[i !== 0 ? i - 1 : -1]
 
-            if (this.status <= 8) console.log(stop, next != null ? next : null, prev != null ? prev : null)
-            else if (this.status === 9) console.log("Bus has broken down.")
-            else if (this.status === 10) console.log("Bus is out of fuel.")
+            if (this.status <= 8) eventCallbacks[0](this.status, stop, next != null ? next : null, prev != null ? prev : null)
+            else if (this.status === 9) eventCallbacks[1](this.status, stop, next != null ? next : null, prev != null ? prev : null)
+            else if (this.status === 10) eventCallbacks[2](this.status, stop, next != null ? next : null, prev != null ? prev : null)
 
             if (i % 2 === 0 || !(this.status <= 8)) this.status = ~~(Math.random() * 11)
 
@@ -193,6 +193,7 @@ class Bus {
         const html = `
         <h2>${this.name}</h2>
         <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
+        <p id="BUS-${this.id}-STOP" class="stop">UNKNOWN STOP</p>
         <button id="BUS-${this.id}-CLOSE" class="close">Close</button>
         `
 
@@ -203,10 +204,20 @@ class Bus {
             setTimeout(this.addCloseDialogListener.bind(this), 100)
         }
     }
+
+    public tick(callbackfn: () => void, s: number) {
+        setInterval(callbackfn, s * 1000)
+    }
 }
 
 let money = 0
 let busPrice = 100
+
+const chooseEvent = (): number => {
+    const numOfEvents = 3
+
+    return ~~(Math.random() * numOfEvents)
+}
 
 const addNewBus = (): boolean => {
     if (money >= busPrice) {
@@ -216,6 +227,15 @@ const addNewBus = (): boolean => {
         const priceElement = document.getElementById("add-new-bus-cost")
 
         newBus.addToList(document.getElementById("buses"))
+        
+        newBus.travel([
+            (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
+                const s = document.querySelector(`BUS-${newBus.id}-STOP`)
+                if (s != null) {
+                    s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
+                }
+            }
+        ])
 
         money -= busPrice
         if (moneyElement) moneyElement.textContent = money.toString()
@@ -260,6 +280,3 @@ addButton?.addEventListener('click', () => {
         dialog.close()
     })
 })
-
-const test = new Bus("Test", new Date().getTime(), Routes.MakeRoute(5))
-test.forEach((k: string, v: number) => console.log(k, v), 1, 2)
