@@ -230,14 +230,14 @@ const addNewBus = (): boolean => {
 
         newBus.travel([
             (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
-                const s = document.querySelector(`BUS-${newBus.id}-STOP`)
+                const s = document.querySelector(`#BUS-${newBus.id}-STOP`)
                 if (s != null) {
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
                 }
             },
 
             (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
-                const s = document.querySelector(`BUS-${newBus.id}-STOP`)
+                const s = document.querySelector(`#BUS-${newBus.id}-STOP`)
                 if (s != null) {
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
                 }
