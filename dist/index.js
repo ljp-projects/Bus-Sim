@@ -180,18 +180,21 @@ const addNewBus = () => {
             (status, stop, next, prev) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`);
                 if (s != null) {
+                    console.log(1);
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
                 }
             },
             (status, stop, next, prev) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`);
                 if (s != null) {
+                    console.log(2);
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
                 }
             },
             (status, stop, next, prev) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`);
                 if (s != null) {
+                    console.log(3);
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${(next === null || next === void 0 ? void 0 : next.name) || "UNKNOWN"}, Previous stop: ${(prev === null || prev === void 0 ? void 0 : prev.name) || "UNKNOWN"}`;
                 }
             }

@@ -230,6 +230,7 @@ const addNewBus = (): boolean => {
             (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`)
                 if (s != null) {
+                    console.log(1)
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
                 }
             },
@@ -237,6 +238,7 @@ const addNewBus = (): boolean => {
             (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`)
                 if (s != null) {
+                    console.log(2)
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
                 }
             },
@@ -244,6 +246,7 @@ const addNewBus = (): boolean => {
             (status: number, stop: Stop, next: Stop | null, prev: Stop | null) => {
                 const s = document.querySelector(`#BUS-${newBus.id}-STOP`)
                 if (s != null) {
+                    console.log(3)
                     s.textContent = `Current stop: ${stop.name}, Next stop: ${next?.name || "UNKNOWN"}, Previous stop: ${prev?.name || "UNKNOWN"}`
                 }
             }
