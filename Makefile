@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := prepare
+.DEFAULT_GOAL := all
 
 deploy:
 	@git pull
@@ -15,3 +15,7 @@ prepare:
 test:
 	@make prepare
 	@yarn parcel /Users/geez/Library/Mobile\ Documents/com~apple~CloudDocs/Bus-SIm/dist/index.html
+
+all:
+	make prepare
+	make deploy

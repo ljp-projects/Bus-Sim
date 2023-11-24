@@ -90,6 +90,7 @@ class Bus {
     hasRoute: boolean = false
     route?: Route
     status: number = 0
+    open: boolean = false
 
     constructor(name: string, id: number, route?: Route) {
         this.name = name
@@ -154,6 +155,7 @@ class Bus {
         const html = `
         <b>${this.name}</b>
         <p>(${this.id})</p>
+        <p id="BUS-${this.id}-STOP" class="stop">UNKNOWN STOP</p>
         <br>
         <button id="BUS-${this.id}-CHECK" class="check">Check</button>
         `
@@ -182,6 +184,7 @@ class Bus {
             content.setAttribute("class", "noblur")
             dialog.close()
             dialog.innerHTML = ""
+            this.open = false
         })
     }
 
@@ -193,7 +196,6 @@ class Bus {
         const html = `
         <h2>${this.name}</h2>
         <p>${this.status <= 8 ? "Normal" : this.status === 9 ? "Bus has broken down." : this.status === 10 ? "Bus is out of fuel" : "UNKOWN"}</p>
-        <p id="BUS-${this.id}-STOP" class="stop">UNKNOWN STOP</p>
         <button id="BUS-${this.id}-CLOSE" class="close">Close</button>
         `
 
@@ -203,6 +205,8 @@ class Bus {
             dialog.showModal()
             setTimeout(this.addCloseDialogListener.bind(this), 100)
         }
+
+        this.open = true
     }
 
     public tick(callbackfn: () => void, s: number) {
@@ -212,12 +216,6 @@ class Bus {
 
 let money = 0
 let busPrice = 100
-
-const chooseEvent = (): number => {
-    const numOfEvents = 3
-
-    return ~~(Math.random() * numOfEvents)
-}
 
 const addNewBus = (): boolean => {
     if (money >= busPrice) {
